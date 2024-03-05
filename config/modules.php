@@ -1,5 +1,6 @@
 <?php
 
+use Modules\Isite\Activators\ModuleActivator;
 use Nwidart\Modules\Activators\FileActivator;
 
 return [

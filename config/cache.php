@@ -20,16 +20,17 @@ return [
 
     'default' => env('CACHE_DRIVER', 'file'),
 
-    /*
-        |--------------------------------------------------------------------------
-        | Default Cache Time
-        |--------------------------------------------------------------------------
-        |
-        | This option controls the default cache time that will use the BaseCacheDecorator
-        | in the Core Module, if this config doesn't exist, the default time will be 60
-        |
-        */
-    'time' => env("CACHE_TIME", 2592000),
+  /*
+       |--------------------------------------------------------------------------
+       | Default Cache Time
+       |--------------------------------------------------------------------------
+       |
+       | This option controls the default cache time that will use the BaseCacheDecorator
+       | in the Core Module, if this config doesn't exist, the default time will be 2592000 - it means 30 days
+       |
+       */
+  'time' => env("CACHE_TIME", 2592000),
+
     /*
     |--------------------------------------------------------------------------
     | Cache Stores
@@ -56,11 +57,13 @@ return [
             'driver' => 'database',
             'table' => 'cache',
             'connection' => null,
+            'lock_connection' => null,
         ],
 
         'file' => [
             'driver' => 'file',
             'path' => storage_path('framework/cache/data'),
+            'lock_path' => storage_path('framework/cache/data'),
         ],
 
         'memcached' => [
@@ -85,6 +88,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'cache',
+            'lock_connection' => 'default',
         ],
 
         'dynamodb' => [
@@ -101,6 +105,10 @@ return [
             'path' => storage_path('framework/cache/data/translations'),
         ],
 
+        'octane' => [
+            'driver' => 'octane',
+        ],
+
     ],
 
     /*
@@ -108,12 +116,12 @@ return [
     | Cache Key Prefix
     |--------------------------------------------------------------------------
     |
-    | When utilizing a RAM based store such as APC or Memcached, there might
-    | be other applications utilizing the same cache. So, we'll specify a
-    | value to get prefixed to all our keys so we can avoid collisions.
+    | When utilizing the APC, database, memcached, Redis, or DynamoDB cache
+    | stores there might be other applications using the same cache. For
+    | that reason, you may prefix every cache key to avoid collisions.
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_cache'),
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
 
 ];
